@@ -1,5 +1,5 @@
-using AIResumeMatcher.DTOs;
 using AIResumeMatcher.Services.Interfaces;
+using AIResumeMatcher.DTOs;
 
 namespace AIResumeMatcher.Services;
 

@@ -1,9 +1,12 @@
 using System.Text.Json;
 using AIResumeMatcher.Configuration;
+using AIResumeMatcher.Middleware;
+using AIResumeMatcher.Services;
+using AIResumeMatcher.Services.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Controllers with camelCase JSON serialization
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -13,10 +16,17 @@ builder.Services.AddControllers()
 // Health checks
 builder.Services.AddHealthChecks();
 
-// Configuration
+// Strongly-typed configuration
 builder.Services.Configure<LlmOptions>(builder.Configuration.GetSection("Llm"));
+builder.Services.Configure<FileUploadOptions>(builder.Configuration.GetSection("FileUpload"));
 
-// CORS
+// Application services
+builder.Services.AddScoped<IPdfParsingService, PdfParsingService>();
+
+builder.Services.AddHttpClient<ILlmAnalysisService, LlmAnalysisService>()
+    .AddStandardResilienceHandler();
+
+// CORS — credentials require an explicit origin, not AllowAnyOrigin()
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontendPolicy", policy =>
@@ -28,16 +38,15 @@ builder.Services.AddCors(options =>
     });
 });
 
-// Swagger/OpenAPI
+// Swagger/OpenAPI — Development only
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-app.UseMiddleware<AIResumeMatcher.Middleware.GlobalExceptionMiddleware>();
+// Global exception handling must be first in the pipeline
+app.UseMiddleware<GlobalExceptionMiddleware>();
 
-
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
