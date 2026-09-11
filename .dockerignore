@@ -1,0 +1,16 @@
+# Secrets
+.env
+.env.*
+user-secrets.json
+
+# Development and Git files
+.git
+.gitignore
+
+# IDE files
+.vs/
+.vscode/
+
+# Build artifacts
+bin/
+obj/
