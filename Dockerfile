@@ -3,7 +3,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS base
 USER $APP_UID
 WORKDIR /app
 # .NET 8+ defaults to port 8080 inside the container
-EXPOSE 8080 
+EXPOSE 10000
 
 # Stage 2: Build environment (heavy SDK, used to compile the code)
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
