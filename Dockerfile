@@ -18,5 +18,6 @@ COPY --from=build /app/publish .
 
 # Render routes to port 10000 by default
 EXPOSE 10000
+ENV ASPNETCORE_URLS=http://+:10000
 
 ENTRYPOINT ["dotnet", "AIResumeMatcher.dll"]
