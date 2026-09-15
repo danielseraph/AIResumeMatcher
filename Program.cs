@@ -31,13 +31,14 @@ builder.Services.AddCors(options =>
 {
     options.AddPolicy("FrontendPolicy", policy =>
     {
-        policy.WithOrigins("https://ai-resume-matcher-app.vercel.app")
-              .AllowAnyHeader()
-              .AllowAnyMethod()
-              .AllowCredentials();
+        policy
+            .SetIsOriginAllowed(origin =>
+                origin == "https://ai-resume-matcher-app.vercel.app" ||
+                origin == "http://localhost:4200")
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
-
 // Swagger/OpenAPI — Development only
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
