@@ -34,7 +34,7 @@ builder.Services.AddCors(options =>
         policy
             .SetIsOriginAllowed(origin =>
                 origin == "https://ai-resume-matcher-app.vercel.app" ||
-                origin == "http://localhost:4200")
+                origin == "http://localhost:5173")
             .AllowAnyHeader()
             .AllowAnyMethod();
     });
